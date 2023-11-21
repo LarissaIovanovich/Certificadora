@@ -1,7 +1,72 @@
-import Head from "next/head"
-import Link from 'next/link'
+import { useState } from 'react';
+import Head from "next/head";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const router = useRouter();
+
+    function validaCadastro() {
+        if (name.length < 3) {
+            setErrorMessage("Nome inválido, mínimo 3 caracteres");
+            return false;
+        }
+        if (!email) {
+            setErrorMessage("E-Mail não informado");
+            return false;
+        }
+        if (password.length < 3) {
+            setErrorMessage("Senha inválida, mínimo 3 caracteres");
+            return false;
+        }
+
+        setErrorMessage("");
+        return true;
+    }
+
+    function Register (event: { preventDefault: () => void; }) {
+        event.preventDefault();
+
+        if (!validaCadastro()) {
+            return;
+        }
+
+        const url = 'http://localhost:8080/users';
+        const json = {
+            name: name,
+            email: email,
+            password: password,
+            role: 'admin'
+        };
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: "cors",
+            body: JSON.stringify(json)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erro de rede! Código: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.id) {
+                router.push('/');
+            }
+        })
+        .catch(error => {
+            setErrorMessage('Erro durante o registro, tente novamente mais tarde');
+        });
+    }
+
     return (
         <>
             <Head>
@@ -19,28 +84,26 @@ export default function Home() {
                     </Link>
                 </div>   
 
-
                 <div className="login-container">
                     <h2>Inscreva-se agora!</h2>
-                    <form className="login-form">
+                    <form className="login-form" onSubmit={Register} >
                         <div className="input-container">
                             <i className="fa fa-user"></i>
-                            <input type="text" placeholder="Usuário..." />
+                            <input type="text" placeholder="Usuário..." onChange={(e) => setName(e.target.value)}/>
                         </div>
                         <div className="input-container">
                             <i className="fa fa-envelope"></i>
-                            <input type="password" placeholder="Email..." />
+                            <input type="email" placeholder="Email..." onChange={(e) => setEmail(e.target.value)}/>
                         </div>
                         <div className="input-container">
-                        <i className="fa fa-lock"></i>
-                        <input type="password" placeholder="Senha..." />
-                    </div>
-                    </form> 
-                
-                    <div className="login-form">
-                        <button type="submit">Login</button>
-                    </div>
-
+                            <i className="fa fa-lock"></i>
+                            <input type="password" placeholder="Senha..." onChange={(e) => setPassword(e.target.value)}/>
+                        </div>
+                        <div className="login-form">
+                            <button type="submit">Login</button>
+                        </div>
+                    </form>
+                    <span>{errorMessage}</span>
                 </div>
             </main>
         </>
