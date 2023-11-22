@@ -52,7 +52,7 @@ export default function Home() {
         })
         .then(data => {
             if (data.email === email) {
-                localStorage.setItem('Token', data.email);
+                localStorage.setItem('Token', data.id);
                 localStorage.setItem('Role', data.role);
                 router.push("/");
             } else {

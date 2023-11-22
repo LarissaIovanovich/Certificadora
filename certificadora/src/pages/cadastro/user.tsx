@@ -40,7 +40,7 @@ export default function Home() {
             name: name,
             email: email,
             password: password,
-            role: 'admin'
+            role: 'common'
         };
 
         fetch(url, {

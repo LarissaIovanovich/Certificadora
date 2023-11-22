@@ -1,27 +1,51 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import Link from 'next/link'
-
+import Link from 'next/link';
+import Noticias from '@/components/Noticias';
+ 
 export default function Home() {
   const router = useRouter();
   const [logado, setLogado] = useState(false);
-
+  const [adm, setAdm] = useState(false);
+  const [noticias, setNoticias] = useState([{id: -1, title: '', subTitle: ''}]);
+  
   useEffect(() => {
-    console.log(localStorage.getItem('Token') + "  -  " + localStorage.getItem('Role'));
-    setLogado(localStorage.getItem('Token')? true : false)
-
+    if (noticias[0].id < 0) {
+      setLogado(localStorage.getItem('Token')? true : false)
+      setAdm(localStorage.getItem('Role') === 'admin'? true : false)
+      redirect();
+    }
   }, [])
 
-  const redirectNoticia = () => {
-    router.push('/noticias/1');
-  }
-  
   function logout () {
     localStorage.removeItem('Token');
     localStorage.removeItem('Role');
     router.reload();
   }
+
+  function redirect () {
+    const url = 'http://localhost:8080/news';
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        mode: "cors",
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Erro de rede! Código: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+      setNoticias(data);
+    })
+    .catch(error => {
+        console.log(error);
+    });
+  } 
 
   return (
     <>
@@ -65,90 +89,21 @@ export default function Home() {
               </div>
               }
 
+              { adm &&
+              <div className="botao">
+                <Link href="/cadastro/noticia">
+                  <button type="button">Cadastrar Notícia</button>
+                </Link>
+              </div>
+              }
+
               <div className="noticia">
                   <h2>Notícias / Eventos</h2>
           
-                  <div className="list">
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>Peaceful Piano</h4>
-                      <p>Relax and indulge with beautiful piano pieces</p>
-                    </div>
-          
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f000000025551996f500ba876bda73fa5" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>Deep Focus</h4>
-                      <p>Keep calm and focus with ambient and post...</p>
-                    </div>
-          
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f00000002fe24d7084be472288cd6ee6c" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>Instrumental Study</h4>
-                      <p>Focus with soft study music in the...</p>
-                    </div>
-          
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f00000002e435ce0a86a8b9dc24527618" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>Workday Lounge</h4>
-                      <p>Lounge and chill out music fot your workday.</p>
-                    </div>
-          
-                  </div>
-                </div>
-          
-                <div className="noticia">
-                  <div className="list">
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f0000000283829f7cdd2443271b6a6ec2" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>Today's Top Hits</h4>
-                      <p>Post Malone is on top of the Hottest 50!</p>
-                    </div>
-          
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f0000000297037047894ce6c9d8e2efc2" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>RapCaviar</h4>
-                      <p>New music from NLE Choppa, Ice Spice an...</p>
-                    </div>
-          
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f00000002b0fe40a6e1692822f5a9d8f1" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>All Out 2010s</h4>
-                      <p>The biggest songs of the 2010s.</p>
-                    </div>
-          
-                    <div className="item">
-                      <img src="https://i.scdn.co/image/ab67706f0000000278b4745cb9ce8ffe32daaf7e" />
-                      <div className="play">
-                        <span className="fa fa-play"></span>
-                      </div>
-                      <h4>Rock classNameics</h4>
-                      <p>Rock legends & epic songs that continue to...</p>
-                    </div>
-          
-          
-                  </div>
-                </div>
+                  {noticias.map(item => (
+                    <Noticias key={item.id} id={item.id} title={item.title} subTitle={item.subTitle} />
+                  ))}
+              </div>
 
               <div className="preview">
                   <div className="imagem">

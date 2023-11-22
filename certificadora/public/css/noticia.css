@@ -22,6 +22,7 @@ header .logo h1 {
     font-size: 30px;
     color: #d42f55;
 }
+
 header .nav {
     display: flex;
     align-items: center;
@@ -109,6 +110,31 @@ main .footer button {
 main .footer button:hover,
 main .footer button:active,
 main .footer button:focus {
+    background-color: #ECA3B7;
+}
+
+footer form textarea {
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    font-family: 'Montserrat', sans-serif;
+    resize: none;
+}
+
+footer form button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #D3607A;
+    color: #ffffff;
+    font-size: 16px;
+    padding: 15px 35px;
+    border: 0px;
+    border-radius: 40px;
+    cursor: pointer;
+    width: 225px;
+}
+footer form button:hover,
+footer form button:active,
+footer form button:focus {
     background-color: #ECA3B7;
 }
 
