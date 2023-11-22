@@ -99,10 +99,11 @@ export default function Home() {
 
               <div className="noticia">
                   <h2>Notícias / Eventos</h2>
-          
-                  {noticias.map(item => (
-                    <Noticias key={item.id} id={item.id} title={item.title} subTitle={item.subTitle} />
-                  ))}
+                  <div className="list">
+                    {noticias.map(item => (
+                      <Noticias key={item.id} id={item.id} title={item.title} subTitle={item.subTitle} />
+                    ))}
+                  </div>
               </div>
 
               <div className="preview">

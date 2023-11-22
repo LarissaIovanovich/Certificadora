@@ -134,7 +134,7 @@ body {
 .noticia .list{
   display: flex;
   gap: 30px;
-  overflow: hidden;
+  flex-wrap: wrap;
 }
 .noticia .list .item{
   min-width: 160px;

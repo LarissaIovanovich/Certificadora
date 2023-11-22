@@ -129,7 +129,7 @@ export default function Home() {
                         </div>
                         <div className="text">
                             <p>
-                                {body}
+                            {body}
                             </p>
                         </div>
                     </div>

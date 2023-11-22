@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import style from '../../public/css/noticiasMenu.module.css'
 
 interface ItemProps {
     id: number;
@@ -32,13 +33,13 @@ const Noticias: React.FC<ItemProps> = ({ id, title, subTitle }) => {
     }
 
     return (
-    <div className="item" onClick={redirect}>
-    <img src="https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6" />
-    <div className="play">
-        <span className="fa fa-play"></span>
-    </div>
-    <h4>{title}</h4>
-    <p>{subTitle}</p>
+    <div className={style.item} onClick={redirect}>
+        <img src="https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6" />
+        <div className={style.play}>
+            <span className="fa fa-play"></span>
+        </div>
+        <h4>{title}</h4>
+        <p>{subTitle}</p>
     </div>
     );
 };
