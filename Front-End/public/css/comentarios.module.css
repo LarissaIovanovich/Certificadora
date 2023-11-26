@@ -1,6 +1,7 @@
 .commentary {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 30px;
     width: 85%;
     margin: 20px auto;
@@ -20,4 +21,5 @@
     border-radius: 20px;
     padding: 10px;
     background-color: rgb(210,210,210);
+    width: 100%;
 }
