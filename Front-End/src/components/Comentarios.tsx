@@ -4,17 +4,19 @@ import axios from 'axios'
 
 interface ItemProps {
     info: string;
+    author: string;
+    publicationDate: string;
 };
 
-const Comentario: React.FC<ItemProps> = ({ info, author,  }) => {
+const Comentario: React.FC<ItemProps> = ({ info, author, publicationDate }) => {
     return (
     <div className={style.commentary}>
         <div className={style.user}>
             <p>
-                Nome usuario
+                {author}
             </p>
             <p>
-                02/11/2023 00h00
+                {publicationDate}
             </p>
         </div>
         <div className={style.comment}>

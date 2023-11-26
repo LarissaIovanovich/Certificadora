@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Comentario from '@/components/Comentarios';
 import axios from 'axios'
 
+
 export default function Home() {
     const router = useRouter();
     const { id } = router.query;
@@ -17,42 +18,72 @@ export default function Home() {
     const[body, setBody] = useState('');
     const[author, setAuthor] = useState('');
     const[dateTime, setDateTime] = useState('');
-    const [comentarios, setComentarios] = useState()
+    const [comentarios, setComentarios] = useState ([{info: '', name: '', pubDate: ''}])
+    
+
+    
 
     useEffect(() => {
         setLogado(localStorage.getItem('Token')? true : false)
         if (id) {
             noticia();
         }
-        if (!comentarios) {
-            carregaComentarios();
-        }
-    }, [id, comentarios])
+    }, [id])
     
     async function noticia () {
-        const conexao = axios.create({
-            baseURL: "http://localhost:8080",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const {data} = await conexao.get("/news/"+id);
-        setTitle(data.title);
-        setSubTitle(data.subTitle);
-        setBody(data.body);
-        setAuthor(data.user.name);
-        setDateTime(data.publicationDate);
+        try{
+            const conexao = axios.create({
+                baseURL: "http://localhost:8080",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const {data} = await conexao.get("/news/"+id);
+            setTitle(data.title);
+            setSubTitle(data.subTitle);
+            setBody(data.body);
+            setAuthor(data.user.name);
+            setDateTime(data.publicationDate);
+
+            const xpto:string | string[] | undefined = id;
+
+            try{
+                carregaComentarios(xpto);
+
+            }catch(error){
+                console.error("Erro ao carregar comentarios")
+            }
+        }catch(error){
+            console.error("Erro ao carregar a notícia")
+
+        }
+
     }
-    
-    async function carregaComentarios () {
-        const conexao = axios.create({
-            baseURL: "http://localhost:8080",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        const {data} = await conexao.get("/commentary/"+id);
-        setComentarios(data);
+    async function carregaComentarios(id: string | string[] | undefined) {
+        try {
+            const conexao = axios.create({
+                baseURL: "http://localhost:8080",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        
+
+            const { data } = await conexao.get(`/commentary/`+id);
+           
+            const listComentarios = data.map((data: { info: any; user: { name: any; }; publicationDate: any; }) => ({
+                info: data.info,
+                name: data.user.name,
+                pubDate: data.publicationDate
+            }));
+            
+            setComentarios(listComentarios)
+           // setComentarios(novosComentarios);
+        } catch (error) {
+            console.error('Erro ao carregar comentários:', error);
+        }
+      
+        
     }
 
     function validaComentario() {
@@ -81,7 +112,8 @@ export default function Home() {
             "info": comentario
         }
         const {data} = await conexao.post("/commentary/"+id, json);
-        router.reload();
+        console.log("" + data)
+        
     }
 
     function resize() {
@@ -181,9 +213,11 @@ export default function Home() {
                             </Link>
                         </div>
                     }
-
-
-
+                    {comentarios.map(item => (
+                      <Comentario author={item.name} info={item.info} publicationDate={item.pubDate} />
+                    ))}
+                    
+                  
                 </footer>
             </main>
         </>
