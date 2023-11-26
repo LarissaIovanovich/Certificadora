@@ -1,0 +1,23 @@
+.commentary {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 85%;
+    margin: 20px auto;
+    background-color: #D3607A;
+    background-color: #ECA3B7;
+    padding: 25px;
+    border-radius: 50px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.user {
+    text-align: center;
+}
+
+.comment {
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 10px;
+    background-color: rgb(210,210,210);
+}
