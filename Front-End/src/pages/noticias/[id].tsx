@@ -112,8 +112,7 @@ export default function Home() {
             "info": comentario
         }
         const {data} = await conexao.post("/commentary/"+id, json);
-        console.log("" + data)
-        
+        router.reload()        
     }
 
     function resize() {
